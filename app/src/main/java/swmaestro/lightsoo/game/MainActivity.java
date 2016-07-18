@@ -1,5 +1,6 @@
 package swmaestro.lightsoo.game;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -9,25 +10,28 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
+import swmaestro.lightsoo.game.Adapter.AnniAdapter;
+import swmaestro.lightsoo.game.Data.Anni;
+import swmaestro.lightsoo.game.Event.AddEventActivity;
 import swmaestro.lightsoo.game.Handler.BackPressCloseHandler;
-import swmaestro.lightsoo.game.Manager.NetworkManager;
-import swmaestro.lightsoo.game.RestAPI.TestAPI;
 
 public class MainActivity extends AppCompatActivity {
 
+    ListView lv_anni;
+    AnniAdapter anniAdapter;
 
     private BackPressCloseHandler backPressCloseHandler;
-    private Button btn_myinfo;
+    private ImageButton btn_addevent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,34 +39,17 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 //        getHash();
-
-
-
+        init();
         //이걸로 기존에 뜨는 Title을 안보이게 한다.
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-
         backPressCloseHandler = new BackPressCloseHandler(this);
 
-
-
-        btn_myinfo = (Button)findViewById(R.id.btn_myinfo);
-        btn_myinfo.setOnClickListener(new View.OnClickListener() {
+        btn_addevent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Call call = NetworkManager.getInstance().getAPI(TestAPI.class).getMyInfo();
-                call.enqueue(new Callback() {
-                    @Override
-                    public void onResponse(Response response, Retrofit retrofit) {
-                        Toast.makeText(MainActivity.this, "서버전송 성공", Toast.LENGTH_SHORT).show();
 
-                    }
-
-                    @Override
-                    public void onFailure(Throwable t) {
-
-                    }
-                });
+                goAddEventActivity();
 
             }
         });
@@ -70,6 +57,53 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void goAddEventActivity(){
+        Intent intent = new Intent(this, AddEventActivity.class);
+        startActivity(intent);
+//        finish();
+    }
+
+    public void init(){
+        lv_anni = (ListView)findViewById(R.id.lv_anni);
+        anniAdapter = new AnniAdapter();
+        lv_anni.setAdapter(anniAdapter);
+        lv_anni.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object data = lv_anni.getItemAtPosition(position);
+                if (data instanceof String) {
+                    Toast.makeText(MainActivity.this, "Header : " + (String) data, Toast.LENGTH_SHORT).show();
+                } else if (data instanceof Anni) {
+                    Anni p = (Anni) data;
+                    Toast.makeText(MainActivity.this, "title : " + p.getTitle(), Toast.LENGTH_SHORT).show();
+
+
+                }
+
+
+            }
+        });
+        initData();
+
+        btn_addevent = (ImageButton)findViewById(R.id.btn_addevent);
+
+    }
+
+    private void initData() {
+        Random r = new Random();
+        int i =0;
+        for (; i < 20; i++) {
+            int date = 20 + r.nextInt(20);
+            if (date % 3 == 0) {
+                date = 0 ;
+            }
+            String title = "기념일" + i;
+            String date1 = "" + date;
+
+            Anni anni = new Anni(i, title, date1);
+            anniAdapter.add(anni);
+        }
+    }
 
     @Override
     public void onBackPressed() {backPressCloseHandler.onBackPressed();}

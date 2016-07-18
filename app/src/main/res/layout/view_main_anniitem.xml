@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="첫 만남"
-        android:id="@+id/tv_title"
+        android:id="@+id/view_tv_title"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="D-100"
-        android:id="@+id/tv_dday"
+        android:id="@+id/view_tv_dday"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true" />
 
@@ -26,8 +26,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/tv_date"
-        android:layout_above="@+id/tv_title"
+        android:id="@+id/view_tv_date"
+        android:layout_above="@+id/view_tv_title"
         android:layout_centerHorizontal="true"
         android:text="4.2 토요일" />
 
@@ -36,16 +36,8 @@
         android:src="@drawable/arrow"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:id="@+id/imageView"
+        android:id="@+id/view_imageView"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true" />
 
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Switch"
-        android:id="@+id/switch1"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/tv_date"
-        android:layout_marginTop="250dp" />
 </RelativeLayout>

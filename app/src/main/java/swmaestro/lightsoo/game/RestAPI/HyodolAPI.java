@@ -1,9 +1,11 @@
 package swmaestro.lightsoo.game.RestAPI;
 
+import com.squareup.okhttp.RequestBody;
+
 import retrofit.Call;
-import retrofit.http.Field;
-import retrofit.http.FormUrlEncoded;
+import retrofit.http.Multipart;
 import retrofit.http.POST;
+import retrofit.http.Part;
 import swmaestro.lightsoo.game.Data.Message;
 
 /**
@@ -11,11 +13,11 @@ import swmaestro.lightsoo.game.Data.Message;
  */
 public interface HyodolAPI {
 
-    @FormUrlEncoded
+    @Multipart
     @POST("/event")
-    Call<Message> addEvent(@Field("event_title")String event_title,
-                           @Field("event_date")String event_date);
-
-
+    Call<Message> addEvent(@Part("event_title")String event_title,
+                           @Part("event_date")String event_date,
+                           @Part("event_img\"; filename=\"image.jpg\" ")RequestBody file1,
+                           @Part("event_img\"; filename=\"image.jpg\" ")RequestBody file2);
 
 }
