@@ -52,12 +52,8 @@
             android:label="@string/title_activity_signup"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Event.FirstEventActivity"
-            android:label="@string/title_activity_first_event"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".Event.AddEventActivity"
-            android:label="@string/title_activity_add_event"
+            android:label="@string/title_activity_first_event"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Event.InfoEventActivity"

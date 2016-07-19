@@ -3,7 +3,7 @@
     android:background="@color/colorPrimartLight"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="175dp">
+    android:layout_height="165dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -28,9 +28,19 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/view_tv_date"
         android:layout_above="@+id/view_tv_title"
-        android:layout_marginBottom="6dp"
+        android:layout_marginBottom="5dp"
         android:layout_centerHorizontal="true"
         android:text="4.2 토요일" />
+
+    <TextView
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="장소"
+        android:id="@+id/view_tv_place"
+        android:layout_below="@+id/view_imageView"
+        android:layout_centerHorizontal="true" />
 
     <ImageView
         android:layout_marginRight="15dp"
@@ -41,14 +51,6 @@
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true" />
 
-    <TextView
-        android:layout_marginTop="6dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="장소"
-        android:id="@+id/view_tv_place"
-        android:layout_below="@+id/view_imageView"
-        android:layout_centerHorizontal="true" />
+
 
 </RelativeLayout>

@@ -22,6 +22,7 @@ public interface HyodolAPI {
     @POST("/event")
     Call<Message> addEvent(@Part("event_title")String event_title,
                            @Part("event_date")String event_date,
+                           @Part("event_place")String event_place,
                            @Part("event_img\"; filename=\"image.jpg\" ")RequestBody file1,
                            @Part("event_img\"; filename=\"image.jpg\" ")RequestBody file2);
 

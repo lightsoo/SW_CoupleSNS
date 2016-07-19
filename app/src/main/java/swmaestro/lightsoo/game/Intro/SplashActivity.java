@@ -18,7 +18,7 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 import swmaestro.lightsoo.game.Data.User;
-import swmaestro.lightsoo.game.Event.FirstEventActivity;
+import swmaestro.lightsoo.game.Event.AddEventActivity;
 import swmaestro.lightsoo.game.MainActivity;
 import swmaestro.lightsoo.game.Manager.NetworkManager;
 import swmaestro.lightsoo.game.Manager.PropertyManager;
@@ -48,7 +48,7 @@ public class SplashActivity extends AppCompatActivity {
     }
     //첫 이벤트 설정
     private void goFirstEvent(){
-        startActivity(new Intent(this, FirstEventActivity.class));
+        startActivity(new Intent(this, AddEventActivity.class));
         finish();
     }
 
