@@ -42,8 +42,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 //        goLoginActivity();
-        goFirstEvent();
-
+//        goFirstEvent();
+        goMainActivity();
 //        doRealStart();
     }
     //첫 이벤트 설정

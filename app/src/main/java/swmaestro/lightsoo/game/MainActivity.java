@@ -5,6 +5,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
@@ -15,17 +18,33 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Random;
 
+import retrofit.Call;
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
 import swmaestro.lightsoo.game.Adapter.AnniAdapter;
 import swmaestro.lightsoo.game.Data.Anni;
 import swmaestro.lightsoo.game.Event.AddEventActivity;
+import swmaestro.lightsoo.game.Event.InfoEventActivity;
 import swmaestro.lightsoo.game.Handler.BackPressCloseHandler;
+import swmaestro.lightsoo.game.Manager.NetworkManager;
+import swmaestro.lightsoo.game.RestAPI.HyodolAPI;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    public static final String TAG = "MainActivity";
+
+    Handler mHandler = new Handler(Looper.getMainLooper());
+
+    SwipeRefreshLayout swipeRefreshLayout;
     ListView lv_anni;
     AnniAdapter anniAdapter;
 
@@ -38,19 +57,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        getHash();
-        init();
         //이걸로 기존에 뜨는 Title을 안보이게 한다.
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         backPressCloseHandler = new BackPressCloseHandler(this);
+//        getHash();
+        init();
+        getEvents();
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getEvents();
+                    }
+                }, 1500);
+            }
+        });
+
 
         btn_addevent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 goAddEventActivity();
-
             }
         });
 
@@ -64,9 +94,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void init(){
+        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.refreshLayout);
         lv_anni = (ListView)findViewById(R.id.lv_anni);
-        anniAdapter = new AnniAdapter();
-        lv_anni.setAdapter(anniAdapter);
+//        anniAdapter = new AnniAdapter();
+//        lv_anni.setAdapter(anniAdapter);
         lv_anni.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -75,7 +106,14 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Header : " + (String) data, Toast.LENGTH_SHORT).show();
                 } else if (data instanceof Anni) {
                     Anni p = (Anni) data;
-                    Toast.makeText(MainActivity.this, "title : " + p.getTitle(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "id : " + p.getId(), Toast.LENGTH_SHORT).show();
+                    //여기서 아이디를 넘겨줘서 액티비티를 만들고 넘겨받은 아이디를 가지고 해당 이벤트의 상세정보를 볼수가 있다.!!!
+                    Intent intent = new Intent(MainActivity.this, InfoEventActivity.class);
+                    intent.putExtra("event_id", p.getId());
+                    startActivity(intent);
+
+
+//                    Toast.makeText(MainActivity.this, "title : " + p.getTitle(), Toast.LENGTH_SHORT).show();
 
 
                 }
@@ -83,10 +121,33 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        initData();
+//        initData();
 
         btn_addevent = (ImageButton)findViewById(R.id.btn_addevent);
 
+    }
+
+    public void getEvents(){
+        Log.d(TAG,"getEvents()");
+        Call<List<Anni>> call = NetworkManager.getInstance().getAPI(HyodolAPI.class).getEvents();
+        call.enqueue(new Callback<List<Anni>>() {
+            @Override
+            public void onResponse(Response<List<Anni>> response, Retrofit retrofit) {
+                List<Anni> result = response.body();
+                Log.d(TAG, "result : " + result);
+                Log.d(TAG, "response = " + new Gson().toJson(result));
+                anniAdapter = new AnniAdapter();
+                anniAdapter.addAll(result);
+                lv_anni.setAdapter(anniAdapter);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+                Toast.makeText(MainActivity.this, t.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void initData() {

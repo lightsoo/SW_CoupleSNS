@@ -172,9 +172,12 @@ public class FirstEventActivity extends AppCompatActivity implements LoaderManag
 //                    goMainActivity();
                     pictureAdd();
 
+                    //여기서 한개 보내면 에러가 떠...
                     //여기서 어떤 사이즈옷인지, 분류할 어떤 데이터인지도 같이 보내줘서 서버에서 처리한다.
                     RequestBody requestBody1 = RequestBody.create(MediaType.parse("multipart/form-data"), file[0]);
                     RequestBody requestBody2 = RequestBody.create(MediaType.parse("multipart/form-data"), file[1]);
+
+
 
                     Call call = NetworkManager.getInstance().getAPI(HyodolAPI.class).addEvent(event_title, event_date, requestBody1, requestBody2);
                     call.enqueue(new Callback() {

@@ -2,10 +2,15 @@ package swmaestro.lightsoo.game.RestAPI;
 
 import com.squareup.okhttp.RequestBody;
 
+import java.util.List;
+
 import retrofit.Call;
+import retrofit.http.GET;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
+import retrofit.http.Path;
+import swmaestro.lightsoo.game.Data.Anni;
 import swmaestro.lightsoo.game.Data.Message;
 
 /**
@@ -19,5 +24,11 @@ public interface HyodolAPI {
                            @Part("event_date")String event_date,
                            @Part("event_img\"; filename=\"image.jpg\" ")RequestBody file1,
                            @Part("event_img\"; filename=\"image.jpg\" ")RequestBody file2);
+
+    @GET("/event")
+    Call<List<Anni>> getEvents();
+
+    @GET("/event/{event_id}")
+    Call<Anni> getEventInfo(@Path("event_id") int event_id);
 
 }
