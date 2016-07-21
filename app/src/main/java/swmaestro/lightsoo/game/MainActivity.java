@@ -18,12 +18,9 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Random;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -35,7 +32,9 @@ import swmaestro.lightsoo.game.Event.AddEventActivity;
 import swmaestro.lightsoo.game.Event.InfoEventActivity;
 import swmaestro.lightsoo.game.Handler.BackPressCloseHandler;
 import swmaestro.lightsoo.game.Manager.NetworkManager;
+import swmaestro.lightsoo.game.Manager.PropertyManager;
 import swmaestro.lightsoo.game.RestAPI.HyodolAPI;
+import swmaestro.lightsoo.game.RestAPI.PushService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -134,11 +133,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Response<List<Anni>> response, Retrofit retrofit) {
                 List<Anni> result = response.body();
-                Log.d(TAG, "result : " + result);
-                Log.d(TAG, "response = " + new Gson().toJson(result));
+
+
+//                Anni anni = new Anni(i, title, date1);
+//                Log.d(TAG, "result : " + result);
+//                Log.d(TAG, "response = " + new Gson().toJson(result));
                 anniAdapter = new AnniAdapter();
                 anniAdapter.addAll(result);
                 lv_anni.setAdapter(anniAdapter);
+                //일단 메인에서 한번 테스트 한다음에 로그인이나 스플래쉬로 옮긴다.
+//                registerToken();
+
             }
 
             @Override
@@ -150,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setRefreshing(false);
     }
 
-    private void initData() {
+    /*private void initData() {
         Random r = new Random();
         int i =0;
         for (; i < 20; i++) {
@@ -164,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
             Anni anni = new Anni(i, title, date1);
             anniAdapter.add(anni);
         }
-    }
+    }*/
 
     @Override
     public void onBackPressed() {backPressCloseHandler.onBackPressed();}
@@ -186,7 +191,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void registerToken(){
+        Call call = NetworkManager.getInstance().getAPI(PushService.class).register(PropertyManager.getInstance().getRegistrationToken());
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Response response, Retrofit retrofit) {
 
+                Toast.makeText(MainActivity.this, "토큰 추가 성공", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+
+                Toast.makeText(MainActivity.this, "토큰 추가 실패", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
 
 
 }

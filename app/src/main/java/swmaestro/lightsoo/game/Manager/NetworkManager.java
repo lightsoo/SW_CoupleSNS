@@ -13,15 +13,16 @@ import retrofit.Retrofit;
 public class NetworkManager {
 
     //aws 아이피주소
-//    private static final String serverURL ="http://52.69.253.226:3000/";
+    private static final String serverURL ="http://52.69.253.226:3000/";
 
     //피타사무실 아이피주소
 //    private static final String serverURL ="http://192.168.0.13:3333/";
+
     //소마
-//    private static final String serverURL ="http://172.16.101.135:3000/";
+//    private static final String serverURL ="http://172.16.101.116:3000/";
 
     //효돌 아이피주소
-    private static final String serverURL ="http://192.168.0.5:3000/";
+//    private static final String serverURL ="http://192.168.0.5:3000/";
     //local
 //        private static final String serverURL ="http://127.0.0.1:3333/";
     Retrofit client;

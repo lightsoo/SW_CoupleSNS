@@ -10,5 +10,6 @@
     <string name="title_activity_add_event">AddEventActivity</string>
     <string name="title_activity_info_event">InfoEventActivity</string>
 
+    <string name="GCM_SenderId">659006440007</string>
 
 </resources>

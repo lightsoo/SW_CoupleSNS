@@ -67,4 +67,7 @@ public class GalleryImageView extends RelativeLayout implements Checkable {
     public void toggle() {
         setChecked(!isChecked);
     }
+
+
+
 }

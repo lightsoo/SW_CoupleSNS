@@ -1,6 +1,8 @@
 package swmaestro.lightsoo.game.Data;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * anni 테이블 컬럼
@@ -15,8 +17,9 @@ public class Anni implements Serializable {
     private String event_date;
     private String event_place;
 //이것 때문에 데이터 파싱이 제대로 안되...따로 빼서 해야될것도 같다...
-//    private List<String> event_img;
+    public List<String> event_img;
 
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 //    private String event_dday;
 
     public Anni(int event_id, String event_title, String event_date){
@@ -54,7 +57,9 @@ public class Anni implements Serializable {
         return event_title;
     }
     public String getDate(){
+
         return event_date;
+
     }
     public int getId(){
         return event_id;

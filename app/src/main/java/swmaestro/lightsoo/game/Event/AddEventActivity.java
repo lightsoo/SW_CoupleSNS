@@ -33,6 +33,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit.Call;
@@ -65,7 +66,10 @@ public class AddEventActivity extends AppCompatActivity implements LoaderManager
     public static final int IMAGE_CHECK_THRESHOLD = 5;
 
 //    file upload
-    private File [] file = new File[5];
+    private File [] file = new File[IMAGE_CHECK_THRESHOLD];
+    private String[] paths;
+    private HashMap<String, RequestBody> partMap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +139,7 @@ public class AddEventActivity extends AppCompatActivity implements LoaderManager
                 //그 값을 가지고 onresume다음에 draw되는 시점에 그려진다.!
                 if (count > IMAGE_CHECK_THRESHOLD) {
                     gridView.setItemChecked(position, false);
-                    Toast.makeText(AddEventActivity.this, "사진은 최대 10장까지 등록할 수 있습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddEventActivity.this, "사진은 최대 5장까지 등록할 수 있습니다.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -173,22 +177,32 @@ public class AddEventActivity extends AppCompatActivity implements LoaderManager
 //                    goMainActivity();
                     pictureAdd();
 
+
+
+                    for(int i = 0;i< paths.length;i++){
+                        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file[i]);
+//                        part.put("" + key + "\"; filename=\"" + key + ".jpg", file);
+                        partMap.put("event_img"+i+"\"; filename=\"image.jpg", requestBody);
+                    }
+
                     //여기서 한개 보내면 에러가 떠...
                     //여기서 어떤 사이즈옷인지, 분류할 어떤 데이터인지도 같이 보내줘서 서버에서 처리한다.
-                    RequestBody requestBody1 = RequestBody.create(MediaType.parse("multipart/form-data"), file[0]);
-                    RequestBody requestBody2 = RequestBody.create(MediaType.parse("multipart/form-data"), file[1]);
-
+//                    RequestBody requestBody1 = RequestBody.create(MediaType.parse("multipart/form-data"), file[0]);
+//                    RequestBody requestBody2 = RequestBody.create(MediaType.parse("multipart/form-data"), file[1]);
 
                     //로딩 다이얼로그
                     final DialogLoadingFragment dialog = new DialogLoadingFragment();
                     dialog.show(getSupportFragmentManager(), "loading");
 
-                    Call call = NetworkManager.getInstance().getAPI(HyodolAPI.class).addEvent(event_title, event_date, event_place, requestBody1, requestBody2);
+                    Call call = NetworkManager.getInstance().getAPI(HyodolAPI.class).test(event_title, event_date, event_place, partMap);
+//                    Call call = NetworkManager.getInstance().getAPI(HyodolAPI.class).addEvent(event_title, event_date, event_place, requestBody1, requestBody2);
+
                     call.enqueue(new Callback() {
                         @Override
                         public void onResponse(Response response, Retrofit retrofit) {
                             Toast.makeText(AddEventActivity.this, "이벤트 추가 성공", Toast.LENGTH_SHORT).show();
-                            goMainActivity();
+//                            goMainActivity();
+                            finish();
                             dialog.dismiss();
                         }
 
@@ -226,7 +240,7 @@ public class AddEventActivity extends AppCompatActivity implements LoaderManager
         btn_ok = (ImageButton)findViewById(R.id.btn_ok);
         //       about gallery
         gridView = (GridView)findViewById(R.id.gallery_image_grid);
-
+        partMap = new HashMap<String, RequestBody>();
     }
 
     public boolean preInspection() {
@@ -295,7 +309,7 @@ public class AddEventActivity extends AppCompatActivity implements LoaderManager
             }
         }
         // image 경로...
-        String[] paths = pathList.toArray(new String[pathList.size()]);
+        paths = pathList.toArray(new String[pathList.size()]);
 
 
         for(int i = 0; i < paths.length; i++){

@@ -45,5 +45,8 @@ dependencies {
     //for facebook
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
 
+//for GCM
+//    compile 'com.google.android.gms:play-services:9.2.1'
+
 
 }

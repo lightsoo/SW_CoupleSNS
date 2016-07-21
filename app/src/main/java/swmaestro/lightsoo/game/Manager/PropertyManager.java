@@ -16,6 +16,10 @@ public class PropertyManager {
 
     public static final String LOGIN_TYPE_FACEBOOK = "login_type_facebook";
 
+//    for GCM
+
+    private static final String REG_TOKEN = "regToken";
+
     private PropertyManager() {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getContext());
         mEditor = mPrefs.edit();
@@ -33,6 +37,15 @@ public class PropertyManager {
     public void setLoginType(String loginType){
         mEditor.putString(KEY_LOGIN_TYPE, loginType);
         mEditor.commit();
+    }
+
+    public void setRegistrationToken(String regId) {
+        mEditor.putString(REG_TOKEN, regId);
+        mEditor.commit();
+    }
+
+    public String getRegistrationToken() {
+        return mPrefs.getString(REG_TOKEN, "");
     }
 
     public String getUserLoginId(){

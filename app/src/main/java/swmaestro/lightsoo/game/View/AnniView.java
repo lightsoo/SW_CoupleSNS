@@ -4,6 +4,10 @@ import android.content.Context;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import swmaestro.lightsoo.game.Data.Anni;
 import swmaestro.lightsoo.game.R;
 
@@ -30,8 +34,24 @@ public class AnniView extends FrameLayout {
     public void setAnni(Anni anni){
         this.anni = anni;
         this.titleView.setText(anni.getTitle());
-        this.dateView.setText(anni.getDate());
+
+
+//        this.dateView.setText(anni.getDate());
+        this.dateView.setText(parseDate(anni.getDate()));
+
+
         this.placeView.setText(anni.getPlace());
+    }
+
+    public String parseDate(String date) {
+        String ds = date;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date d=null;
+        try {
+            d = sdf.parse(ds);
+        } catch (ParseException e) {
+        }
+        return sdf.format(d);
     }
 
 }
